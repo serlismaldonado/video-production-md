@@ -1,0 +1,25 @@
+# Requerimientos para scripts de producción audiovisual
+
+## Dependencias principales
+PyYAML>=6.0.1      # Para manejo de archivos YAML (metadatos)
+argparse>=1.4.0    # Para parsing de argumentos (ya incluido en Python)
+
+## Instalación
+```bash
+# Instalar dependencias
+pip install -r requirements.txt
+
+# O instalar individualmente
+pip install PyYAML
+```
+
+## Verificación de instalación
+```bash
+# Verificar que las dependencias estén instaladas
+python -c "import yaml; print('PyYAML instalado correctamente')"
+```
+
+## Notas
+- `argparse` es parte de la biblioteca estándar de Python 3
+- `PyYAML` es necesario para leer/escribir archivos metadata.yaml
+- Python 3.8 o superior recomendado
