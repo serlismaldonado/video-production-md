@@ -1,0 +1,256 @@
+# Metadatos de Producción - "Historia de Boquitas Fiestas"
+# Documental sobre la marca de golosinas hondureña
+
+# Información básica de la producción
+production:
+   title: "Historia de Boquitas Fiestas"
+   working_title: "Boquitas Fiestas: Dulce Tradición Hondureña"
+   genre: ["Documental", "Corporativo", "Historia de Marca"]
+   format: "Documental Corto"
+   duration_minutes: 15
+   language: "Español"
+   target_audience: "Público hondureño, comunidad empresarial, estudiantes de marketing"
+   logline: "La historia de cómo una pequeña golosina se convirtió en un ícono cultural de Honduras"
+   synopsis: |
+      Este documental explora el origen y evolución de Boquitas Fiestas, una de las marcas
+      de golosinas más emblemáticas de Honduras. Desde su creación hasta su posición actual
+      en el mercado, descubriremos cómo esta marca ha endulzado generaciones y se ha
+      convertido en parte de la identidad cultural hondureña.
+   themes:
+      [
+         "Emprendimiento",
+         "Tradición",
+         "Innovación",
+         "Cultura hondureña",
+         "Marca icónica",
+      ]
+
+# Fechas y cronograma
+timeline:
+   concept_start: "2024-01-22"
+   preproduction_start: "2024-01-23"
+   production_start: "2024-02-01"
+   postproduction_start: "2024-02-15"
+   delivery_date: "2024-03-01"
+   release_date: "2024-03-15"
+
+# Equipo principal
+crew:
+   director:
+      name: "Por asignar"
+      role: "Director"
+      contact: ""
+      notes: "Experiencia en documentales corporativos"
+
+   producer:
+      name: "Por asignar"
+      role: "Productor Ejecutivo"
+      contact: ""
+
+   cinematographer:
+      name: "Por asignar"
+      role: "Director de Fotografía"
+      contact: ""
+
+   writer:
+      name: "Por asignar"
+      role: "Investigador/Guionista"
+      contact: ""
+
+   editor:
+      name: "Por asignar"
+      role: "Editor"
+      contact: ""
+
+   researcher:
+      name: "Por asignar"
+      role: "Investigador Histórico"
+      contact: ""
+
+# Presupuesto
+budget:
+   total_estimated: 25000
+   currency: "USD"
+   breakdown:
+      preproduction: 5000
+      production: 12000
+      postproduction: 6000
+      contingency: 2000
+   funding_sources:
+      - source: "Empresa productora"
+        amount: 15000
+      - source: "Patrocinio corporativo"
+        amount: 10000
+
+# Aspectos técnicos
+technical:
+   aspect_ratio: "16:9"
+   resolution: "4K"
+   frame_rate: 24
+   color_profile: "Rec.709"
+   sound_format: "Stereo"
+   delivery_formats: ["MP4", "ProRes 422", "H.264"]
+
+# Locaciones principales
+locations:
+   - name: "Fábrica Boquitas Fiestas"
+     type: "Interior"
+     address: "Tegucigalpa, Honduras"
+     shooting_days: 2
+     permits_required: true
+     notes: "Acceso a líneas de producción y archivos históricos"
+
+   - name: "Oficinas corporativas"
+     type: "Interior"
+     address: "Tegucigalpa, Honduras"
+     shooting_days: 1
+     permits_required: true
+     notes: "Entrevistas con ejecutivos"
+
+   - name: "Mercados tradicionales"
+     type: "Exterior"
+     address: "Mercado San Isidro, Tegucigalpa"
+     shooting_days: 1
+     permits_required: true
+     notes: "Capturar presencia de producto en comercio tradicional"
+
+   - name: "Archivo histórico"
+     type: "Interior"
+     address: "Tegucigalpa, Honduras"
+     shooting_days: 1
+     permits_required: true
+     notes: "Fotografías y documentos históricos de la marca"
+
+# Entrevistados clave
+interviewees:
+   - name: "Fundador/Familia fundadora"
+     role: "Fundador de la empresa"
+     interview_duration: 60
+     notes: "Historia de creación y primeros años"
+
+   - name: "Gerente actual"
+     role: "Gerente General"
+     interview_duration: 45
+     notes: "Evolución y estrategia actual"
+
+   - name: "Empleado veterano"
+     role: "Empleado con +20 años"
+     interview_duration: 30
+     notes: "Perspectiva interna de la evolución"
+
+   - name: "Consumidor representativo"
+     role: "Cliente de toda la vida"
+     interview_duration: 20
+     notes: "Impacto cultural y recuerdos asociados"
+
+# Equipo técnico requerido
+equipment:
+   camera:
+      - model: "Sony FX6"
+        quantity: 2
+        lenses: ["24-70mm", "50mm prime", "85mm prime"]
+
+   lighting:
+      - type: "LED Panel Aputure 300x"
+        quantity: 3
+        wattage: 300
+      - type: "Softbox"
+        quantity: 2
+
+   sound:
+      - type: "Micrófono de solapa Sennheiser"
+        quantity: 3
+      - type: "Micrófono de cañón"
+        quantity: 1
+      - type: "Grabadora Zoom F8n"
+        quantity: 1
+
+   grip:
+      - type: "Trípode fluido"
+        quantity: 2
+      - type: "Slider"
+        quantity: 1
+
+# Metadatos para búsqueda y organización
+metadata:
+   tags:
+      [
+         "documental",
+         "honduras",
+         "golosinas",
+         "historia-de-marca",
+         "boquitas-fiestas",
+         "cultura",
+         "empresarial",
+      ]
+   keywords:
+      [
+         "golosinas hondureñas",
+         "tradición",
+         "emprendimiento",
+         "dulces",
+         "marca icónica",
+         "identidad cultural",
+      ]
+   project_code: "DOC-BF-2024"
+   client: "Empresa de Golosinas Hondureña"
+   status: "preproduction"
+   priority: "high"
+
+# Configuración para LLMs
+llm_config:
+   analysis_prompts:
+      script_analysis: "Analiza este guion documental considerando: estructura narrativa, flujo de información, equilibrio entre datos y emociones, y efectividad para transmitir la historia de la marca."
+      research_focus: "Identifica áreas que requieren investigación adicional sobre la historia de Boquitas Fiestas y el contexto de la industria de golosinas en Honduras."
+      interview_planning: "Sugiere preguntas clave para entrevistas basadas en los temas principales del documental."
+
+   generation_templates:
+      interview_questions: "Genera preguntas para entrevista con {interviewee_role} enfocadas en {specific_topic}."
+      narration_script: "Escribe narración para la sección sobre {historical_period} considerando tono {desired_tone}."
+
+# Enlaces y referencias
+references:
+   research_sources:
+      - "Archivos históricos de la empresa"
+      - "Reportes anuales y documentos corporativos"
+      - "Artículos de prensa sobre la industria de golosinas en Honduras"
+      - "Estudios de mercado sobre consumo de dulces"
+
+   visual_references:
+      - "Fotografías históricas de la fábrica"
+      - "Diseños de empaques a través del tiempo"
+      - "Material publicitario histórico"
+      - "Imágenes de archivo de Honduras años 80-90"
+
+   similar_productions:
+      - "Documentales sobre marcas icónicas latinoamericanas"
+      - "Historias de emprendimiento en Centroamérica"
+      - "Documentales corporativos de éxito"
+
+# Notas adicionales
+notes: |
+   PROYECTO ESPECIAL: Historia de Boquitas Fiestas
+
+   Consideraciones importantes:
+   1. Sensibilidad cultural: Respetar la importancia de la marca en la cultura hondureña
+   2. Acceso a información: Coordinar con la empresa para acceso a archivos históricos
+   3. Entrevistas: Priorizar entrevistas con fundadores o familiares si están disponibles
+   4. Contexto histórico: Incluir contexto del desarrollo industrial de Honduras
+   5. Derechos de imagen: Obtener permisos para uso de material histórico
+
+   Objetivos específicos:
+   - Preservar la historia de la marca para futuras generaciones
+   - Destacar el impacto económico y cultural
+   - Inspirar a nuevos emprendedores hondureños
+   - Fortalecer la identidad de marca
+
+# Historial de versiones
+version_history:
+   - date: "2024-01-22"
+     version: "1.0"
+     changes: "Creación inicial del proyecto - Historia de Boquitas Fiestas"
+     author: "Sistema de Producción Audiovisual"
+   - date: "2024-01-22"
+     version: "1.1"
+     changes: "Personalización completa para proyecto documental de Boquitas Fiestas"
+     author: "Equipo de producción"
