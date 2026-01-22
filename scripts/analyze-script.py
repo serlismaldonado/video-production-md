@@ -101,8 +101,10 @@ class ScriptAnalyzer:
             except Exception:
                 pass
 
-        # Contar escenas
-        scenes = re.findall(r"## ESCENA \d+", self.script_content)
+        # Contar escenas/secuencias
+        scenes = re.findall(
+            r"## (?:ESCENA|SECUENCIA) \d+", self.script_content, re.IGNORECASE
+        )
         metadata["scenes"] = len(scenes)
 
         # Extraer personajes
@@ -146,8 +148,10 @@ class ScriptAnalyzer:
             "pacing": "medio",
         }
 
-        # Dividir en escenas
-        scenes = re.split(r"## ESCENA \d+", self.script_content)[1:]
+        # Dividir en escenas/secuencias
+        scenes = re.split(
+            r"## (?:ESCENA|SECUENCIA) \d+", self.script_content, flags=re.IGNORECASE
+        )[1:]
 
         if not scenes:
             return structure
@@ -181,13 +185,16 @@ class ScriptAnalyzer:
             )
 
         # Determinar ritmo basado en longitud de escenas
-        avg_scene_length = sum(scene_lengths) / len(scene_lengths)
-        if avg_scene_length < 15:
-            structure["pacing"] = "rápido"
-        elif avg_scene_length > 30:
-            structure["pacing"] = "lento"
+        if scene_lengths:  # Verificar que haya escenas
+            avg_scene_length = sum(scene_lengths) / len(scene_lengths)
+            if avg_scene_length < 15:
+                structure["pacing"] = "rápido"
+            elif avg_scene_length > 30:
+                structure["pacing"] = "lento"
+            else:
+                structure["pacing"] = "medio"
         else:
-            structure["pacing"] = "medio"
+            structure["pacing"] = "medio"  # Valor por defecto si no hay escenas
 
         return structure
 
