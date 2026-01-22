@@ -4,18 +4,30 @@ Script para crear una nueva producción audiovisual desde plantilla.
 Genera la estructura completa de directorios y archivos markdown.
 """
 
+import argparse
 import os
 import shutil
 import sys
 from datetime import datetime
 from pathlib import Path
 
-import yaml
+try:
+    import yaml
+
+    YAML_AVAILABLE = True
+except ImportError:
+    YAML_AVAILABLE = False
+    print(
+        "⚠️  Advertencia: PyYAML no está instalado. Algunas funciones estarán limitadas."
+    )
+    print("   Instala con: pip install PyYAML")
 
 
 def load_template_config():
     """Cargar configuración de la plantilla."""
-    template_dir = Path("templates/production-template")
+    # Obtener directorio base del proyecto
+    project_root = Path(__file__).parent.parent
+    template_dir = project_root / "templates" / "production-template"
 
     config = {
         "template_dir": template_dir,
@@ -55,7 +67,8 @@ def create_production_structure(production_name, template_config, interactive=Tr
     """Crear estructura completa de producción."""
 
     # Directorio de destino
-    productions_dir = Path("productions")
+    project_root = Path(__file__).parent.parent
+    productions_dir = project_root / "productions"
     production_dir = productions_dir / production_name
 
     # Verificar si ya existe
@@ -95,18 +108,30 @@ def create_production_structure(production_name, template_config, interactive=Tr
         shutil.rmtree(production_dir, ignore_errors=True)
         return False
 
-    # Actualizar metadatos básicos
-    update_production_metadata(production_dir, production_name)
+    # Actualizar metadatos básicos si YAML está disponible
+    if YAML_AVAILABLE:
+        update_production_metadata(production_dir, production_name)
 
-    # Si es interactivo, solicitar información adicional
-    if interactive:
-        gather_additional_info(production_dir, production_name)
+        # Si es interactivo, solicitar información adicional
+        if interactive:
+            gather_additional_info(production_dir, production_name)
+    else:
+        print(
+            "⚠️  PyYAML no está instalado. No se pueden actualizar metadatos automáticamente."
+        )
+        print(
+            "   Crea manualmente el archivo metadata.yaml basado en templates/production-template/metadata.yaml"
+        )
 
     return True
 
 
 def update_production_metadata(production_dir, production_name):
     """Actualizar metadatos básicos de la producción."""
+
+    if not YAML_AVAILABLE:
+        print("⚠️  PyYAML no está instalado. No se pueden actualizar metadatos.")
+        return
 
     metadata_file = production_dir / "metadata.yaml"
 
@@ -144,7 +169,7 @@ def update_production_metadata(production_dir, production_name):
                 "date": datetime.now().strftime("%Y-%m-%d"),
                 "version": "1.0",
                 "changes": "Creación de producción desde plantilla",
-                "author": os.getenv("USER", "system"),
+                "author": os.getenv("USER", os.getenv("USERNAME", "system")),
             }
         )
 
@@ -166,6 +191,12 @@ def update_production_metadata(production_dir, production_name):
 
 def gather_additional_info(production_dir, production_name):
     """Recopilar información adicional interactivamente."""
+
+    if not YAML_AVAILABLE:
+        print(
+            "⚠️  PyYAML no está instalado. No se puede recopilar información adicional."
+        )
+        return
 
     print("\n📝 Información adicional de la producción")
     print("=" * 50)
@@ -262,6 +293,10 @@ def print_success_message(production_name, production_dir):
     print(f"\n📁 Nombre: {production_name}")
     print(f"📂 Ubicación: {production_dir}")
 
+    # Mostrar ruta relativa para facilidad de uso
+    rel_path = production_dir.relative_to(Path(__file__).parent.parent)
+    print(f"📁 Ruta relativa: {rel_path}")
+
     print("\n📋 Estructura creada:")
     print("  ├── README.md                    # Overview de la producción")
     print("  ├── metadata.yaml                # Metadatos estructurados")
@@ -312,6 +347,31 @@ def print_success_message(production_name, production_dir):
 def main():
     """Función principal."""
 
+    parser = argparse.ArgumentParser(
+        description="Creador de Producciones Audiovisuales",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Ejemplos:
+  %(prog)s "Mi-Produccion"           # Crear producción con nombre específico
+  %(prog)s                           # Modo interactivo (pregunta nombre)
+  %(prog)s --help                    # Mostrar esta ayuda
+        """,
+    )
+
+    parser.add_argument(
+        "nombre",
+        nargs="?",
+        help="Nombre de la nueva producción (opcional, se pregunta si no se proporciona)",
+    )
+
+    parser.add_argument(
+        "--non-interactive",
+        action="store_true",
+        help="Modo no interactivo (no pregunta confirmación)",
+    )
+
+    args = parser.parse_args()
+
     print("🎬 Creador de Producciones Audiovisuales")
     print("=" * 50)
 
@@ -327,9 +387,9 @@ def main():
         return 1
 
     # Obtener nombre de producción
-    if len(sys.argv) > 1:
-        production_name = sys.argv[1]
-        interactive = False
+    if args.nombre:
+        production_name = args.nombre
+        interactive = not args.non_interactive
     else:
         production_name = input("\n📝 Nombre de la nueva producción: ").strip()
         interactive = True
@@ -344,10 +404,12 @@ def main():
 
     # Confirmar creación
     if interactive:
-        print(f"\n📋 Resumen:")
+        print("\n📋 Resumen:")
         print(f"  Nombre: {production_name}")
         print(f"  Ubicación: productions/{production_name}")
-        print(f"  Plantilla: {template_config['template_dir']}")
+        print(
+            f"  Plantilla: {template_config['template_dir'].relative_to(Path(__file__).parent.parent)}"
+        )
 
         confirm = input("\n¿Crear producción? (s/n): ").strip().lower()
         if confirm not in ["s", "si", "y", "yes"]:
@@ -361,7 +423,8 @@ def main():
     success = create_production_structure(production_name, template_config, interactive)
 
     if success:
-        production_dir = Path("productions") / production_name
+        project_root = Path(__file__).parent.parent
+        production_dir = project_root / "productions" / production_name
         print_success_message(production_name, production_dir)
         return 0
     else:

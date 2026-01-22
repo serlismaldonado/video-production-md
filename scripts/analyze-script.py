@@ -5,12 +5,11 @@ Analiza estructura, personajes, diálogo, ritmo y genera sugerencias.
 """
 
 import argparse
-import os
 import re
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 # Configuración para diferentes proveedores de LLM
 LLM_CONFIG = {
@@ -99,7 +98,7 @@ class ScriptAnalyzer:
                 metadata["estimated_duration"] = int(
                     duration_match.group(1).strip().split()[0]
                 )
-            except:
+            except Exception:
                 pass
 
         # Contar escenas
@@ -108,14 +107,16 @@ class ScriptAnalyzer:
 
         # Extraer personajes
         characters_section = re.search(
-            r"### PERSONAJES PRINCIPALES\n(.+?)\n###", self.script_content, re.DOTALL
+            r"### PERSONAJES PRINCIPALES\n(.+?)(?:\n###|\n---)",
+            self.script_content,
+            re.DOTALL,
         )
         if characters_section:
             lines = characters_section.group(1).strip().split("\n")
             metadata["characters"] = [
                 line.strip().replace("- ", "").replace("* ", "")
                 for line in lines
-                if line.strip()
+                if line.strip() and not line.strip().startswith("#")
             ]
 
         # Extraer locaciones
@@ -194,9 +195,14 @@ class ScriptAnalyzer:
         """Analizar personajes y diálogo."""
         characters = {}
 
-        # Extraer todo el diálogo
-        dialogue_pattern = r"\*\*(.+?)\*\*\s*\n(.+?)(?=\n\*\*|\n\n|$)"
-        dialogues = re.findall(dialogue_pattern, self.script_content, re.DOTALL)
+        # Extraer todo el diálogo - solo líneas que comienzan con ** y terminan antes de otro ** o línea vacía
+        # Excluir cabeceras de escena que también usan **
+        dialogue_pattern = (
+            r"^\*\*([A-ZÁÉÍÓÚÑ\s]+(?:\([^)]+\))?)\*\*\s*\n(.+?)(?=\n\*\*|\n\n|$)"
+        )
+        dialogues = re.findall(
+            dialogue_pattern, self.script_content, re.MULTILINE | re.DOTALL
+        )
 
         for character, dialogue in dialogues:
             character = character.strip()
@@ -247,9 +253,14 @@ class ScriptAnalyzer:
             "readability_score": 0,
         }
 
-        # Extraer diálogo
-        dialogue_pattern = r"\*\*(.+?)\*\*\s*\n(.+?)(?=\n\*\*|\n\n|$)"
-        dialogues = re.findall(dialogue_pattern, self.script_content, re.DOTALL)
+        # Extraer diálogo - solo líneas que comienzan con ** y terminan antes de otro ** o línea vacía
+        # Excluir cabeceras de escena que también usan **
+        dialogue_pattern = (
+            r"^\*\*([A-ZÁÉÍÓÚÑ\s]+(?:\([^)]+\))?)\*\*\s*\n(.+?)(?=\n\*\*|\n\n|$)"
+        )
+        dialogues = re.findall(
+            dialogue_pattern, self.script_content, re.MULTILINE | re.DOTALL
+        )
 
         if not dialogues:
             return dialogue_analysis
@@ -453,7 +464,7 @@ Prompt que se enviaría:
             f"Escenas por página: {metadata['scenes'] / max(1, metadata['pages']):.1f}"
         )
         report.append(
-            f"Diálogo por personaje (promedio): {characters['character_count'] / max(1, sum(c[1]['dialogue_count'] for c in characters['main_characters'])):.1f} líneas"
+            f"Diálogo por personaje (promedio): {sum(c[1]['dialogue_count'] for c in characters['main_characters']) / max(1, characters['character_count']):.1f} líneas"
         )
 
         # Calcular densidad de diálogo
@@ -557,114 +568,116 @@ Prompt que se enviaría:
                 "*Usa `python scripts/analyze-script.py --help` para más opciones*"
             )
 
-            return "\n".join(report)
+        return "\n".join(report)
 
-        def save_report(self, report: str, output_path: Optional[Path] = None) -> Path:
-            """Guardar reporte de análisis."""
+    def save_report(self, report: str, output_path: Optional[Path] = None) -> Path:
+        """Guardar reporte de análisis."""
 
-            if output_path is None:
-                # Crear nombre de archivo basado en el guion
-                script_name = self.script_path.stem
-                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                output_path = (
-                    self.script_path.parent / f"analysis_{script_name}_{timestamp}.md"
-                )
-
-            try:
-                with open(output_path, "w", encoding="utf-8") as f:
-                    f.write(report)
-                return output_path
-            except Exception as e:
-                print(f"❌ Error guardando reporte: {e}")
-                raise
-
-    def main():
-        """Función principal."""
-
-        parser = argparse.ArgumentParser(
-            description="Analizador de guiones en formato markdown"
-        )
-        parser.add_argument("script", help="Ruta al archivo de guion (.md)")
-        parser.add_argument(
-            "--output", "-o", help="Ruta de salida para el reporte (opcional)"
-        )
-        parser.add_argument(
-            "--llm",
-            action="store_true",
-            help="Incluir análisis con LLM (requiere configuración)",
-        )
-        parser.add_argument(
-            "--provider",
-            choices=["openai", "anthropic", "local"],
-            default="openai",
-            help="Proveedor de LLM a usar",
-        )
-
-        args = parser.parse_args()
-
-        print("📊 Analizador de Guiones")
-        print("=" * 50)
+        if output_path is None:
+            # Crear nombre de archivo basado en el guion
+            script_name = self.script_path.stem
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_path = (
+                self.script_path.parent / f"analysis_{script_name}_{timestamp}.md"
+            )
 
         try:
-            # Crear analizador
-            analyzer = ScriptAnalyzer(Path(args.script), args.provider)
-
-            # Cargar guion
-            print(f"📖 Cargando guion: {args.script}")
-            if not analyzer.load_script():
-                return 1
-
-            # Extraer metadatos
-            print("🔍 Extrayendo metadatos...")
-            metadata = analyzer.extract_metadata()
-            print(f"   • Título: {metadata['title']}")
-            print(f"   • Autor: {metadata['author']}")
-            print(f"   • Escenas: {metadata['scenes']}")
-            print(f"   • Personajes: {len(metadata['characters'])}")
-
-            # Generar reporte
-            print("\n📈 Generando análisis...")
-            report = analyzer.generate_report(include_llm=args.llm)
-
-            # Guardar reporte
-            output_path = analyzer.save_report(
-                report, Path(args.output) if args.output else None
-            )
-            print(f"\n✅ Reporte guardado: {output_path}")
-
-            # Mostrar resumen
-            print("\n📋 RESUMEN DEL ANÁLISIS")
-            print("-" * 40)
-
-            # Análisis de estructura
-            structure = analyzer.analyze_structure()
-            print(f"Ritmo: {structure['pacing'].capitalize()}")
-            print(
-                f"Diálogo/Acción: {structure['dialogue_ratio']:.1f}% / {structure['action_ratio']:.1f}%"
-            )
-
-            # Análisis de personajes
-            characters = analyzer.analyze_characters()
-            print(f"Personajes principales: {len(characters['main_characters'])}")
-
-            # Análisis de diálogo
-            dialogue = analyzer.analyze_dialogue()
-            print(f"Legibilidad: {dialogue['readability_score']}/100")
-
-            print(f"\n📄 Ver reporte completo: {output_path}")
-
-            return 0
-
-        except FileNotFoundError as e:
-            print(f"❌ {e}")
-            return 1
+            with open(output_path, "w", encoding="utf-8") as f:
+                f.write(report)
+            return output_path
         except Exception as e:
-            print(f"❌ Error inesperado: {e}")
+            print(f"❌ Error guardando reporte: {e}")
+            raise
+
+
+def main():
+    """Función principal."""
+
+    parser = argparse.ArgumentParser(
+        description="Analizador de guiones en formato markdown"
+    )
+    parser.add_argument("script", help="Ruta al archivo de guion (.md)")
+    parser.add_argument(
+        "--output", "-o", help="Ruta de salida para el reporte (opcional)"
+    )
+    parser.add_argument(
+        "--llm",
+        action="store_true",
+        help="Incluir análisis con LLM (requiere configuración)",
+    )
+    parser.add_argument(
+        "--provider",
+        choices=["openai", "anthropic", "local"],
+        default="openai",
+        help="Proveedor de LLM a usar",
+    )
+
+    args = parser.parse_args()
+
+    print("📊 Analizador de Guiones")
+    print("=" * 50)
+
+    try:
+        # Crear analizador
+        analyzer = ScriptAnalyzer(Path(args.script), args.provider)
+
+        # Cargar guion
+        print(f"📖 Cargando guion: {args.script}")
+        if not analyzer.load_script():
             return 1
 
-    if __name__ == "__main__":
-        try:
-            sys.exit(main())
-        except KeyboardInterrupt:
-            print("\n\n❌ Operación cancelada por el usuario.")
-            sys.exit(1)
+        # Extraer metadatos
+        print("🔍 Extrayendo metadatos...")
+        metadata = analyzer.extract_metadata()
+        print(f"   • Título: {metadata['title']}")
+        print(f"   • Autor: {metadata['author']}")
+        print(f"   • Escenas: {metadata['scenes']}")
+        print(f"   • Personajes: {len(metadata['characters'])}")
+
+        # Generar reporte
+        print("\n📈 Generando análisis...")
+        report = analyzer.generate_report(include_llm=args.llm)
+
+        # Guardar reporte
+        output_path = analyzer.save_report(
+            report, Path(args.output) if args.output else None
+        )
+        print(f"\n✅ Reporte guardado: {output_path}")
+
+        # Mostrar resumen
+        print("\n📋 RESUMEN DEL ANÁLISIS")
+        print("-" * 40)
+
+        # Análisis de estructura
+        structure = analyzer.analyze_structure()
+        print(f"Ritmo: {structure['pacing'].capitalize()}")
+        print(
+            f"Diálogo/Acción: {structure['dialogue_ratio']:.1f}% / {structure['action_ratio']:.1f}%"
+        )
+
+        # Análisis de personajes
+        characters = analyzer.analyze_characters()
+        print(f"Personajes principales: {len(characters['main_characters'])}")
+
+        # Análisis de diálogo
+        dialogue = analyzer.analyze_dialogue()
+        print(f"Legibilidad: {dialogue['readability_score']}/100")
+
+        print(f"\n📄 Ver reporte completo: {output_path}")
+
+        return 0
+
+    except FileNotFoundError as e:
+        print(f"❌ {e}")
+        return 1
+    except Exception as e:
+        print(f"❌ Error inesperado: {e}")
+        return 1
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except KeyboardInterrupt:
+        print("\n\n❌ Operación cancelada por el usuario.")
+        sys.exit(1)
