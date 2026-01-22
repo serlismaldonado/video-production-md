@@ -1,0 +1,157 @@
+# Metadatos de Producción Audiovisual
+# Plantilla para nueva producción - Rellenar con información específica
+
+# Información básica de la producción
+production:
+  title: "Título de la Producción"
+  working_title: "Título de trabajo (opcional)"
+  genre: ["Género 1", "Género 2"]
+  format: "Cortometraje"  # Cortometraje, Largometraje, Serie, Comercial, Documental, etc.
+  duration_minutes: 10
+  language: "Español"
+  target_audience: "Público objetivo"
+  logline: "Una línea que resume la historia completa"
+  synopsis: "Sinopsis de 1-2 párrafos"
+  themes: ["Tema 1", "Tema 2", "Tema 3"]
+
+# Fechas y cronograma
+timeline:
+  concept_start: "2024-01-01"
+  preproduction_start: "2024-01-15"
+  production_start: "2024-02-01"
+  postproduction_start: "2024-02-15"
+  delivery_date: "2024-03-01"
+  release_date: "2024-03-15"
+
+# Equipo principal
+crew:
+  director:
+    name: "Nombre del Director"
+    role: "Director"
+    contact: "email@ejemplo.com"
+    notes: "Notas adicionales"
+
+  producer:
+    name: "Nombre del Productor"
+    role: "Productor"
+    contact: "email@ejemplo.com"
+
+  cinematographer:
+    name: "Nombre del Director de Fotografía"
+    role: "Director de Fotografía"
+
+  writer:
+    name: "Nombre del Guionista"
+    role: "Guionista"
+
+  editor:
+    name: "Nombre del Editor"
+    role: "Editor"
+
+# Presupuesto
+budget:
+  total_estimated: 10000
+  currency: "USD"
+  breakdown:
+    preproduction: 2000
+    production: 5000
+    postproduction: 2000
+    contingency: 1000
+  funding_sources:
+    - source: "Fuente 1"
+      amount: 5000
+    - source: "Fuente 2"
+      amount: 5000
+
+# Aspectos técnicos
+technical:
+  aspect_ratio: "16:9"
+  resolution: "4K"
+  frame_rate: 24
+  color_profile: "Rec.709"
+  sound_format: "Stereo"
+  delivery_formats: ["MP4", "ProRes", "DNxHD"]
+
+# Locaciones principales
+locations:
+  - name: "Locación 1"
+    type: "Interior/Exterior"
+    address: "Dirección completa"
+    shooting_days: 2
+    permits_required: true
+    notes: "Notas sobre la locación"
+
+  - name: "Locación 2"
+    type: "Interior"
+    address: "Dirección completa"
+    shooting_days: 1
+
+# Cast principal
+cast:
+  - character: "Personaje Principal"
+    actor: "Nombre del Actor"
+    role_type: "Protagonista"
+    shooting_days: 5
+    notes: "Notas sobre el personaje"
+
+  - character: "Personaje Secundario"
+    actor: "Nombre del Actor"
+    role_type: "Secundario"
+    shooting_days: 3
+
+# Equipo técnico requerido
+equipment:
+  camera:
+    - model: "Cámara Principal"
+      quantity: 1
+      lenses: ["24-70mm", "50mm prime"]
+
+  lighting:
+    - type: "LED Panel"
+      quantity: 3
+      wattage: 300
+
+  sound:
+    - type: "Micrófono de solapa"
+      quantity: 2
+    - type: "Grabadora de campo"
+      quantity: 1
+
+# Metadatos para búsqueda y organización
+metadata:
+  tags: ["tag1", "tag2", "tag3"]
+  keywords: ["palabra clave 1", "palabra clave 2"]
+  project_code: "PROD-001"
+  client: "Cliente (si aplica)"
+  status: "preproduction"  # preproduction, production, postproduction, delivered, archived
+  priority: "medium"  # low, medium, high, critical
+
+# Configuración para LLMs
+llm_config:
+  analysis_prompts:
+    script_analysis: "Analiza este guion considerando estructura, personajes, diálogo y ritmo."
+    budget_optimization: "Sugiere formas de optimizar el presupuesto manteniendo calidad."
+    schedule_planning: "Genera un cronograma eficiente basado en las locaciones y disponibilidad."
+
+  generation_templates:
+    call_sheet: "Genera una hoja de llamado para el día {date} con locación {location} y equipo {crew}."
+    shot_list: "Crea una lista de planos para la escena {scene_number} considerando {requirements}."
+
+# Enlaces y referencias
+references:
+  moodboards: ["enlace-a-moodboard-1", "enlace-a-moodboard-2"]
+  similar_productions: ["Producción similar 1", "Producción similar 2"]
+  inspiration: ["Película inspiradora 1", "Película inspiradora 2"]
+
+# Notas adicionales
+notes: |
+  Espacio para notas adicionales, consideraciones especiales,
+  requisitos específicos del cliente, o cualquier información
+  que no encaje en las categorías anteriores.
+
+# Historial de versiones
+version_history:
+  - date: "2024-01-01"
+    version: "1.0"
+    changes: "Creación inicial del archivo de metadatos"
+    author: "Nombre del Autor"

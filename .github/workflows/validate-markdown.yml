@@ -1,0 +1,106 @@
+name: Validate Markdown
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate-markdown:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install markdownlint
+      run: npm install -g markdownlint-cli
+
+    - name: Validate markdown files
+      run: |
+        # Validar estructura básica de markdown
+        markdownlint "**/*.md" --ignore node_modules --ignore .git
+
+    - name: Check YAML syntax
+      run: |
+        # Validar archivos YAML
+        find . -name "*.yaml" -o -name "*.yml" | grep -v node_modules | grep -v .git | while read file; do
+          echo "Validating $file"
+          python3 -c "import yaml; yaml.safe_load(open('$file'))" || exit 1
+        done
+
+    - name: Validate production structure
+      run: |
+        # Verificar estructura básica de producciones
+        for prod in productions/*/; do
+          if [ -d "$prod" ]; then
+            echo "Checking production: $prod"
+
+            # Verificar archivos requeridos
+            [ -f "$prod/README.md" ] || echo "⚠️  Missing: $prod/README.md"
+            [ -f "$prod/metadata.yaml" ] || echo "⚠️  Missing: $prod/metadata.yaml"
+
+            # Verificar estructura de directorios
+            [ -d "$prod/01-preproduccion" ] || echo "⚠️  Missing: $prod/01-preproduccion/"
+            [ -d "$prod/02-guion" ] || echo "⚠️  Missing: $prod/02-guion/"
+            [ -d "$prod/03-produccion" ] || echo "⚠️  Missing: $prod/03-produccion/"
+            [ -d "$prod/04-postproduccion" ] || echo "⚠️  Missing: $prod/04-postproduccion/"
+            [ -d "$prod/05-archivos" ] || echo "⚠️  Missing: $prod/05-archivos/"
+          fi
+        done
+
+    - name: Generate structure report
+      run: |
+        echo "# 📊 Production Structure Report" > structure-report.md
+        echo "" >> structure-report.md
+        echo "Generated: $(date)" >> structure-report.md
+        echo "" >> structure-report.md
+
+        echo "## Productions Found:" >> structure-report.md
+        count=0
+        for prod in productions/*/; do
+          if [ -d "$prod" ]; then
+            count=$((count + 1))
+            prod_name=$(basename "$prod")
+            echo "- **$prod_name**" >> structure-report.md
+
+            # Contar archivos markdown
+            md_count=$(find "$prod" -name "*.md" | wc -l)
+            yaml_count=$(find "$prod" -name "*.yaml" -o -name "*.yml" | wc -l)
+
+            echo "  - Markdown files: $md_count" >> structure-report.md
+            echo "  - YAML files: $yaml_count" >> structure-report.md
+
+            # Verificar fase más avanzada
+            if [ -d "$prod/04-postproduccion" ] && [ "$(ls -A "$prod/04-postproduccion" 2>/dev/null)" ]; then
+              echo "  - Status: 🎬 Post-production" >> structure-report.md
+            elif [ -d "$prod/03-produccion" ] && [ "$(ls -A "$prod/03-produccion" 2>/dev/null)" ]; then
+              echo "  - Status: 📽️ Production" >> structure-report.md
+            elif [ -d "$prod/02-guion" ] && [ "$(ls -A "$prod/02-guion" 2>/dev/null)" ]; then
+              echo "  - Status: 📝 Script development" >> structure-report.md
+            elif [ -d "$prod/01-preproduccion" ] && [ "$(ls -A "$prod/01-preproduccion" 2>/dev/null)" ]; then
+              echo "  - Status: 📋 Pre-production" >> structure-report.md
+            else
+              echo "  - Status: 🆕 New project" >> structure-report.md
+            fi
+          fi
+        done
+
+        echo "" >> structure-report.md
+        echo "**Total productions: $count**" >> structure-report.md
+
+        # Subir reporte como artifact
+        echo "structure-report.md" >> artifact-files.txt
+
+    - name: Upload structure report
+      uses: actions/upload-artifact@v4
+      with:
+        name: structure-report
+        path: structure-report.md
+        if-no-files-found: warn

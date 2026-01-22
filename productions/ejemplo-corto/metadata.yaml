@@ -1,0 +1,176 @@
+# Metadatos de Producción - "El Último Café"
+# Ejemplo de producción corta
+
+# Información básica de la producción
+production:
+  title: "El Último Café"
+  working_title: "Café Reencuentro"
+  genre: ["Drama", "Romance"]
+  format: "Cortometraje"
+  duration_minutes: 12
+  language: "Español"
+  target_audience: "Adultos 30-50 años"
+  logline: "Dos ex amantes se reencuentran después de 20 años en el café donde solían verse, confrontando secretos no dichos y caminos no tomados."
+  synopsis: "Marcos y Elena, que tuvieron un romance intenso en su juventud, se reencuentran por casualidad en 'La Esquina', el café que frecuentaban. Lo que comienza como una conversación casual se transforma en una confesión íntima donde revelan verdades guardadas por dos décadas, cuestionando las decisiones que los separaron."
+  themes: ["Tiempo", "Arrepentimiento", "Segundas oportunidades", "Amor no correspondido"]
+
+# Fechas y cronograma
+timeline:
+  concept_start: "2024-01-10"
+  preproduction_start: "2024-01-15"
+  production_start: "2024-02-20"
+  postproduction_start: "2024-02-26"
+  delivery_date: "2024-03-15"
+  release_date: "2024-04-01"
+
+# Equipo principal
+crew:
+  director:
+    name: "Ana López"
+    role: "Director"
+    contact: "ana@ejemplo.com"
+    notes: "Especialista en cine intimista"
+
+  producer:
+    name: "Carlos Méndez"
+    role: "Productor"
+    contact: "carlos@ejemplo.com"
+
+  cinematographer:
+    name: "David Ruiz"
+    role: "Director de Fotografía"
+    contact: "david@ejemplo.com"
+
+  writer:
+    name: "María García"
+    role: "Guionista"
+    contact: "maria@ejemplo.com"
+
+  editor:
+    name: "Pedro Sánchez"
+    role: "Editor"
+    contact: "pedro@ejemplo.com"
+
+# Presupuesto
+budget:
+  total_estimated: 13000
+  currency: "USD"
+  breakdown:
+    preproduction: 2000
+    production: 8000
+    postproduction: 3000
+    contingency: 1000
+  funding_sources:
+    - source: "Fondo de cine independiente"
+      amount: 8000
+    - source: "Inversión privada"
+      amount: 5000
+
+# Aspectos técnicos
+technical:
+  aspect_ratio: "16:9"
+  resolution: "4K"
+  frame_rate: 24
+  color_profile: "Rec.709"
+  sound_format: "Stereo"
+  delivery_formats: ["MP4", "ProRes 422"]
+
+# Locaciones principales
+locations:
+  - name: "Café La Esquina"
+    type: "Interior"
+    address: "Calle Principal 123, Ciudad"
+    shooting_days: 3
+    permits_required: true
+    notes: "Confirmado para 22-25 de febrero. Dueño: Sr. Rodríguez"
+
+  - name: "Parque Central"
+    type: "Exterior"
+    address: "Avenida Central, Ciudad"
+    shooting_days: 1
+    permits_required: true
+    notes: "Escena de flashback. Verificar clima."
+
+# Cast principal
+cast:
+  - character: "Marcos (40 años)"
+    actor: "Javier Martínez"
+    role_type: "Protagonista"
+    shooting_days: 4
+    notes: "Confirmado. Disponible 20-25 febrero."
+
+  - character: "Elena (40 años)"
+    actor: "Laura Fernández"
+    role_type: "Protagonista"
+    shooting_days: 4
+    notes: "Confirmada. Tiene otro proyecto el 26."
+
+  - character: "Camarero"
+    actor: "Roberto Díaz"
+    role_type: "Secundario"
+    shooting_days: 1
+    notes: "Actor local. Solo día 22."
+
+# Equipo técnico requerido
+equipment:
+  camera:
+    - model: "Sony FX3"
+      quantity: 1
+      lenses: ["35mm prime", "50mm prime", "85mm prime"]
+
+  lighting:
+    - type: "LED Panel Aputure 300x"
+      quantity: 2
+      wattage: 300
+    - type: "Softbox"
+      quantity: 2
+
+  sound:
+    - type: "Micrófono de solapa Sennheiser"
+      quantity: 2
+    - type: "Grabadora Zoom F6"
+      quantity: 1
+
+# Metadatos para búsqueda y organización
+metadata:
+  tags: ["drama", "romance", "cortometraje", "reencuentro", "nostalgia"]
+  keywords: ["amor", "tiempo", "secretos", "café", "conversación"]
+  project_code: "PROD-20240115"
+  client: "Independiente"
+  status: "preproduction"
+  priority: "high"
+
+# Configuración para LLMs
+llm_config:
+  analysis_prompts:
+    script_analysis: "Analiza este guion de drama íntimo considerando: desarrollo de personajes, tensión emocional, naturalidad del diálogo, y efectividad de la estructura de reencuentro."
+    character_development: "Evalúa la evolución emocional de Marcos y Elena a lo largo de su conversación. ¿Sus revelaciones son creíbles y emocionalmente resonantes?"
+    visual_storytelling: "Sugiere planos y composiciones que enfaticen la intimidad y el paso del tiempo en un espacio cerrado como un café."
+
+  generation_templates:
+    call_sheet: "Genera una hoja de llamado para el café 'La Esquina' con equipo reducido y dos actores principales."
+    shot_list: "Crea lista de planos para escena de conversación íntima en mesa de café, considerando primeros planos y planos medios."
+
+# Enlaces y referencias
+references:
+  moodboards: ["https://ejemplo.com/moodboard-cafe", "https://ejemplo.com/referencias-visuales"]
+  similar_productions: ["Antes del Atardecer", "Conversaciones con Otros Mujeres"]
+  inspiration: ["Películas de diálogo íntimo", "Cine de Rohmer", "Dramas de relaciones"]
+
+# Notas adicionales
+notes: |
+  Producción de bajo presupuesto con enfoque en actuación y diálogo.
+  Espacio reducido (café) requiere planificación cuidadosa de movimiento de cámara.
+  Clima impredecible en febrero - tener plan B para escena exterior.
+  Actor principal tiene horario limitado - maximizar eficiencia en set.
+
+# Historial de versiones
+version_history:
+  - date: "2024-01-15"
+    version: "1.0"
+    changes: "Creación inicial del proyecto"
+    author: "Ana López"
+  - date: "2024-01-20"
+    version: "1.1"
+    changes: "Actualización de casting y locaciones"
+    author: "Carlos Méndez"
